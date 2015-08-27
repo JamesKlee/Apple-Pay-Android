@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ApplePay</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_sniff">sniff</string>
+    <string name="warning">NFC DISABLED</string>
+    <string name="enabled">NFC ENABLED</string>
+    <string name="sniff">SNIFF</string>
+    <string name="stealth">STEALTH</string>
+    <string name="aiddescription">aiddescription</string>
+    <string name="servicedesc">servicedesc</string>
+</resources>

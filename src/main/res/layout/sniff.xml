@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sniff_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.james.applepay.Sniff">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollSniff"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:requiresFadingEdge="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbarThumbVertical="@drawable/scrollbar">
+
+        <TextView
+            android:id="@+id/scrollText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#00CC00"
+            android:textSize="15sp" />
+    </ScrollView>
+
+    <ToggleButton
+        android:id="@+id/swap_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0"
+        android:background="#000000"
+        android:checked="true"
+        android:textColor="#00CC00"
+        android:textOff="@string/stealth"
+        android:textOn="@string/stealth"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
