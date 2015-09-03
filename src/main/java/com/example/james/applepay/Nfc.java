@@ -4,7 +4,9 @@ import android.content.Context;
 import android.nfc.NfcAdapter;
 import android.support.v7.app.AppCompatActivity;
 
-
+/**
+ * Class that allows access to the nfcAdapter and basic methods to interact
+ */
 public class Nfc extends AppCompatActivity {
 
     private NfcAdapter nfcAdapter;

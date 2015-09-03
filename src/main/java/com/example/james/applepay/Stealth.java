@@ -23,6 +23,8 @@ public class Stealth extends AppCompatActivity {
 
     private String protocols;
     private String protocol;
+    private final String logLocation = "ApplePay/Log.txt";
+    private final String actionFilter = "james.applepay.action.NOTIFY_APDU_DATA";
 
     private static boolean start = true;
     public static boolean active = false;
@@ -46,6 +48,7 @@ public class Stealth extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
+        //CHECK NFC STATUS
         Boolean nfcOn = nfc.checkNFC();
         warning = (TextView) findViewById(R.id.textView_warning);
 
@@ -88,10 +91,13 @@ public class Stealth extends AppCompatActivity {
             }
         });
 
-        //RESTOFCODE
-        androidFile = new AndroidFile("ApplePay/Log.txt");
+        //SET LOCATION OF LOG FILE
+        androidFile = new AndroidFile(logLocation);
     }
 
+    /**
+     * If a broadcast has been received and it contains an APDU message then call the function "update"
+     */
     final BroadcastReceiver apduNotificationsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -109,9 +115,7 @@ public class Stealth extends AppCompatActivity {
         super.onStart();
         active = true;
 
-        final IntentFilter apduNotificationsFilter = new IntentFilter();
-        apduNotificationsFilter.addAction("james.applepay.action.NOTIFY_APDU_DATA");
-        registerReceiver(apduNotificationsReceiver, apduNotificationsFilter);
+        setUpFilter();
     }
 
     @Override
@@ -125,9 +129,7 @@ public class Stealth extends AppCompatActivity {
         super.onResume();
         active = true;
 
-        final IntentFilter apduNotificationsFilter = new IntentFilter();
-        apduNotificationsFilter.addAction("james.applepay.action.NOTIFY_APDU_DATA");
-        registerReceiver(apduNotificationsReceiver, apduNotificationsFilter);
+        setUpFilter();
     }
 
     @Override
@@ -138,6 +140,19 @@ public class Stealth extends AppCompatActivity {
         unregisterReceiver(apduNotificationsReceiver);
     }
 
+    /**
+     * Sets up a new receiver that filters for APDU messages
+     */
+    private void setUpFilter() {
+        final IntentFilter apduNotificationsFilter = new IntentFilter();
+        apduNotificationsFilter.addAction(actionFilter);
+        registerReceiver(apduNotificationsReceiver, apduNotificationsFilter);
+    }
+
+    /**
+     * Updates the list of APDU messages and writes it to the log file
+     * @param toAdd The APDU message to add
+     */
     public void update(String toAdd) {
 
         if (toAdd.equals(ApduService.card + ApduService.NON_RECOGNISED_APDU)) {

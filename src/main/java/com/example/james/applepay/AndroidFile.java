@@ -6,14 +6,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Class to write to a file
+ */
 public class AndroidFile {
 
     private static File file;
     private Boolean fileCreated;
 
-    public AndroidFile(String filename) {
+    /**
+     * Creates the new file
+     * @param fileLocation The location and name of the file
+     */
+    public AndroidFile(String fileLocation) {
         file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_NOTIFICATIONS), filename);
+                Environment.DIRECTORY_NOTIFICATIONS), fileLocation);
         try {
             file.createNewFile();
         } catch (IOException e) {

@@ -20,6 +20,8 @@ public class Sniff extends AppCompatActivity {
 
     private String protocols;
     private String protocol;
+    private final String actionFilter = "james.applepay.action.NOTIFY_APDU_DATA";
+    private final String logLocation = "ApplePay/Log.txt";
 
     private TextView output;
 
@@ -32,7 +34,8 @@ public class Sniff extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sniff);;
+        setContentView(R.layout.sniff);
+        ;
 
         //HIDE STATUS BAR
         View decorView = getWindow().getDecorView();
@@ -48,7 +51,7 @@ public class Sniff extends AppCompatActivity {
             }
         });
 
-        //NFC
+        //SETUP NFC
         nfc = new Nfc(this);
         NfcAdapter adapter = nfc.getNfcAdapter();
 
@@ -81,10 +84,13 @@ public class Sniff extends AppCompatActivity {
         });
 
         //RESTOFCODE
-        androidFile = new AndroidFile("ApplePay/Log.txt");
+        androidFile = new AndroidFile(logLocation);
         output.setText(protocols);
     }
 
+    /**
+     * If a broadcast has been received and it contains an APDU message then call the function "update"
+     */
     final BroadcastReceiver apduNotificationsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -102,9 +108,7 @@ public class Sniff extends AppCompatActivity {
         super.onStart();
         active = true;
 
-        final IntentFilter apduNotificationsFilter = new IntentFilter();
-        apduNotificationsFilter.addAction("james.applepay.action.NOTIFY_APDU_DATA");
-        registerReceiver(apduNotificationsReceiver, apduNotificationsFilter);
+        setUpFilter();
     }
 
     @Override
@@ -118,9 +122,7 @@ public class Sniff extends AppCompatActivity {
         super.onResume();
         active = true;
 
-        final IntentFilter apduNotificationsFilter = new IntentFilter();
-        apduNotificationsFilter.addAction("james.applepay.action.NOTIFY_APDU_DATA");
-        registerReceiver(apduNotificationsReceiver, apduNotificationsFilter);
+        setUpFilter();
     }
 
     @Override
@@ -131,6 +133,19 @@ public class Sniff extends AppCompatActivity {
         unregisterReceiver(apduNotificationsReceiver);
     }
 
+    /**
+     * Sets up a new receiver that filters for APDU messages
+     */
+    private void setUpFilter() {
+        final IntentFilter apduNotificationsFilter = new IntentFilter();
+        apduNotificationsFilter.addAction(actionFilter);
+        registerReceiver(apduNotificationsReceiver, apduNotificationsFilter);
+    }
+
+    /**
+     * Updates the list of APDU messages and writes it to the log file
+     * @param toAdd The APDU message to add
+     */
     public void update(String toAdd) {
 
         if (toAdd.equals(ApduService.NON_RECOGNISED_APDU)) {
